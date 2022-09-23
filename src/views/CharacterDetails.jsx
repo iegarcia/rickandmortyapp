@@ -10,8 +10,10 @@ const CharacterDetails = () => {
 
   const [details, setDetails] = useState([]);
   const [episodes, setEpisodes] = useState([]);
+
   const [textColor, setTextColor] = useState("green");
-  const [display, setDisplay] = useState("unset");
+  const [display, setDisplay] = useState("list-item");
+  const [height, setHeight] = useState("unset");
 
   useEffect(() => {
     async function run() {
@@ -35,13 +37,17 @@ const CharacterDetails = () => {
 
       const episodesData = await getDataById("episode", episodesId);
       setEpisodes(episodesData);
+
+      if (episodesData.length <= 2 || episodesData.length === undefined) {
+        setHeight("94vh");
+      }
     }
     run();
   }, [characterId]);
 
   return (
     <div>
-      <Container>
+      <Container style={{ height: height }}>
         <Row
           xs={1}
           md={4}
@@ -62,32 +68,36 @@ const CharacterDetails = () => {
                     Status:{" "}
                     <strong style={{ color: textColor }}>{d.status}</strong>
                   </h4>
-                  <p>
-                    {d.species} - {d.gender}
-                  </p>
-                  <p style={{ display: display }}>
-                    Type: <strong>{d.type}</strong>
-                  </p>
-                  <p>
-                    Born in:{" "}
-                    <a
-                      target="_blank"
-                      href={`https://www.google.com/search?q=${d.origin.name}`}
-                      rel="noreferrer"
-                    >
-                      {d.origin.name}
-                    </a>
-                  </p>
-                  <p>
-                    Current location:{" "}
-                    <a
-                      target="_blank"
-                      href={`https://www.google.com/search?q=${d.location.name}`}
-                      rel="noreferrer"
-                    >
-                      {d.location.name}
-                    </a>
-                  </p>
+                  <ul style={{ textAlign: "left" }}>
+                    <li>
+                      {d.species} - {d.gender}
+                    </li>
+                    <li style={{ display: display }}>
+                      Type: <strong>{d.type}</strong>
+                    </li>
+                    <li>
+                      Born in:{" "}
+                      <a
+                        target="_blank"
+                        href={`https://www.google.com/search?q=${d.origin.name}`}
+                        rel="noreferrer"
+                        style={{ color: "white" }}
+                      >
+                        {d.origin.name}
+                      </a>
+                    </li>
+                    <li>
+                      Current location:{" "}
+                      <a
+                        target="_blank"
+                        href={`https://www.google.com/search?q=${d.location.name}`}
+                        rel="noreferrer"
+                        style={{ color: "white" }}
+                      >
+                        {d.location.name}
+                      </a>
+                    </li>
+                  </ul>
                 </Col>
               </>
             );
