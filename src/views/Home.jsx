@@ -1,12 +1,14 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
-import { Col, Container, Pagination, Row } from "react-bootstrap";
+import { Button, Col, Container, Form, Pagination, Row } from "react-bootstrap";
 import Character from "../components/Character";
-import { getData } from "../functions";
+
+import { getData, searchByName } from "../functions";
 
 const Home = () => {
   const [characters, setCharacters] = useState([]);
   const [info, setInfo] = useState([]);
+  const [value, setValue] = useState("");
 
   const paginate = (url) => {
     axios.get(url).then((data) => {
@@ -21,6 +23,11 @@ const Home = () => {
 
   const handlePreviousPage = () => {
     paginate(info.prev);
+  };
+
+  const search = async () => {
+    let searchResults = await searchByName(value);
+    setCharacters(searchResults.results);
   };
 
   useEffect(() => {
@@ -48,6 +55,19 @@ const Home = () => {
       </div>
 
       <Container>
+        <h3>Search</h3>
+        <Form onSubmit={(e) => e.preventDefault() || search()}>
+          <Form.Control
+            type="text"
+            placeholder="Search"
+            style={{ display: "inline", width: "unset" }}
+            onChange={(e) => setValue(e.target.value)}
+          />
+          <Button variant="primary" type="submit">
+            Go!
+          </Button>
+        </Form>
+        <hr />
         <Row xs={1} md={2} lg={4} className="g-4">
           {characters.map((c) => {
             return (

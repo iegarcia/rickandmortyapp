@@ -16,4 +16,12 @@ async function getDataById(section, id) {
   return response.data;
 }
 
-export { getData, getDataById };
+async function searchByName(name) {
+  const response = await axios.get(
+    `https://rickandmortyapi.com/api/character/?name=${name}`
+  );
+
+  return response.data;
+}
+
+export { getData, getDataById, searchByName };
